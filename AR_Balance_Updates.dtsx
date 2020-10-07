@@ -1,0 +1,789 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/5/2020 10:59:11 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="9LDZL13"
+  DTS:CreatorName="FACT\michelle.rutz"
+  DTS:DTSID="{2CC9C8AA-EF03-4D00-AF93-91E4453CEE12}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.123"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="1"
+  DTS:VersionGUID="{EDA638BD-6A47-4513-B2B5-5929A797445D}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Data Flow Task"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{5A7BE80E-61BF-4C70-9027-A18C25C296FC}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Data Flow Task"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Data Flow Task\AR Snapshot Raw"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="AR Snapshot Raw"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[ar_snapshot_raw]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT
+	clt.Office as business_unit
+	,client.id AS client_id
+	,ent.number AS client_number
+	,ent.name AS client_name
+	,debtor.id AS debtor_id
+	,d_ent.number AS debtor_number
+	,d_ent.name AS debtor_name
+	,inv.invno as invoice_number
+	,inv.TransPostDate transpostdate
+	,inv.amt as invoice_amount
+	,inv.balance as invoice_balance
+	,DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) as age
+	,CASE WHEN inv.DebtorKey IN (11352,30273) THEN 'ADVANCE' ELSE 'INVOICE' END type
+	,CURRENT_TIMESTAMP as row_created_date
+	,CAST(CURRENT_TIMESTAMP as date) AS date
+	,CASE
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 30 THEN '&lt;=30'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 60 THEN '31-60'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 90 THEN '61-90'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 120 THEN '91-120'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &gt; 120 THEN '121+'
+	END AS ar_bucket
+	,client.row_source_system
+
+FROM CadenceReplica.dbo.Invoices (nolock) inv
+	INNER JOIN CadenceReplica.dbo.Clients clt (nolock) on inv.clientkey = clt.clientkey
+	INNER JOIN CadenceReplica.dbo.Debtors dbt (nolock) on inv.debtorkey = dbt.debtorkey
+	INNER JOIN dbo.client ON clt.clientkey = client.row_source_system_key
+		AND client.row_source_system = 'Cadence'
+	INNER JOIN dbo.entity ent ON client.entity_id = ent.id
+	INNER JOIN dbo.debtor ON dbt.DebtorKey = debtor.row_source_system_key
+		AND debtor.row_source_system = 'Cadence'
+	INNER JOIN dbo.entity d_ent ON debtor.entity_id = d_ent.id
+
+WHERE
+	inv.balance &lt;&gt; 0
+	AND inv.amt &lt;&gt; 0
+	AND inv.BuyStatus = 3
+	and clt.ClientKey &lt;&gt; 10704
+	and clt.office = 'TBSFACTORING'
+
+UNION ALL
+
+SELECT
+	'TBSCAPFUND' business
+	,cli.id AS client_id
+	,c_entity.number AS client_number
+	,c_entity.name AS client_name
+	,dbt.id AS debtor_id
+	,ent.number AS debtor_number
+	,ent.name AS debtor_name
+	,i.tranid invoice_number
+	,i.trandate transpostdate
+	,foreigntotal inovice_amount
+	,foreignamountunpaid invoice_balance
+	,datediff(day,i.trandate,CURRENT_TIMESTAMP) age
+	,'INVOICE' as type
+	,CURRENT_TIMESTAMP as row_created_date
+	,CAST(CURRENT_TIMESTAMP as date) AS date
+	,CASE
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 30 THEN '&lt;=30'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 60 THEN '31-60'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 90 THEN '61-90'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 120 THEN '91-120'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &gt; 120 THEN '121+'
+	END AS ar_bucket
+	,cli.row_source_system
+
+FROM netsuite.invoice i
+	 inner join netsuite.client c on i.custbody_client = c.id
+	 inner join dbo.Client cli on c.id = cli.row_source_system_key
+		AND cli.row_source_system = 'Netsuite'
+	INNER JOIN dbo.entity c_entity ON cli.entity_id = c_entity.id
+	 inner join netsuite.debtor d on i.entity = d.id
+	 inner join dbo.Debtor dbt on d.id = dbt.row_source_system_key
+		AND dbt.row_source_system = 'Netsuite'
+	INNER JOIN dbo.entity ent ON dbt.entity_id = ent.id
+
+WHERE foreignamountunpaid &lt;&gt; 0</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\AR Snapshot Raw.Connections[OleDbConnection]"
+                  connectionManagerID="{63544EDD-85F1-4E60-B530-4B9956845431}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[tbs-cl-rds-sql-01.choziwohin32.us-east-1.rds.amazonaws.com.EDWIntegration_DEV.michelle.rutz]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[business_unit]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[business_unit]"
+                      length="20"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[business_unit]"
+                      name="business_unit"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_id]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]"
+                      name="client_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_number]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_number]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_number]"
+                      name="client_number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_name]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_name]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_name]"
+                      name="client_name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_id]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_id]"
+                      name="debtor_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_number]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_number]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_number]"
+                      name="debtor_number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_name]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_name]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_name]"
+                      name="debtor_name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_number]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_number]"
+                      length="138"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_number]"
+                      name="invoice_number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[transpostdate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[transpostdate]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[transpostdate]"
+                      name="transpostdate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_amount]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]"
+                      name="invoice_amount"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_balance]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]"
+                      name="invoice_balance"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[age]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[age]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[age]"
+                      name="age"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[type]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[type]"
+                      length="7"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[type]"
+                      name="type"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_created_date]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_created_date]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_created_date]"
+                      name="row_created_date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[ar_bucket]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[ar_bucket]"
+                      length="6"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[ar_bucket]"
+                      name="ar_bucket"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_source_system]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_source_system]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_source_system]"
+                      name="row_source_system"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[date]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[date]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[date]"
+                      name="date"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[business_unit]"
+                      dataType="wstr"
+                      length="20"
+                      name="business_unit" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_id]"
+                      dataType="i4"
+                      name="client_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="client_number" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="client_name" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_id]"
+                      dataType="i4"
+                      name="debtor_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="debtor_number" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="debtor_name" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_number]"
+                      dataType="wstr"
+                      length="138"
+                      name="invoice_number" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[transpostdate]"
+                      dataType="dbTimeStamp"
+                      name="transpostdate" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_amount]"
+                      dataType="r8"
+                      name="invoice_amount" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_balance]"
+                      dataType="r8"
+                      name="invoice_balance" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[age]"
+                      dataType="i4"
+                      name="age" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="7"
+                      name="type" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_created_date]"
+                      dataType="dbTimeStamp"
+                      name="row_created_date" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[ar_bucket]"
+                      codePage="1252"
+                      dataType="str"
+                      length="6"
+                      name="ar_bucket" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_source_system]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="row_source_system" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[date]"
+                      dataType="dbDate"
+                      name="date" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[business_unit]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[business_unit]"
+                      name="business_unit" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_id]"
+                      name="client_id" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_number]"
+                      name="client_number" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_name]"
+                      name="client_name" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_id]"
+                      name="debtor_id" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_number]"
+                      name="debtor_number" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_name]"
+                      name="debtor_name" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_number]"
+                      dataType="wstr"
+                      length="138"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_number]"
+                      name="invoice_number" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[transpostdate]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[transpostdate]"
+                      name="transpostdate" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_amount]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_amount]"
+                      name="invoice_amount" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_balance]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_balance]"
+                      name="invoice_balance" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[age]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[age]"
+                      name="age" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="7"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[type]"
+                      name="type" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_created_date]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_created_date]"
+                      name="row_created_date" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ar_bucket]"
+                      codePage="1252"
+                      dataType="str"
+                      length="6"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ar_bucket]"
+                      name="ar_bucket" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_source_system]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_source_system]"
+                      name="row_source_system" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[date]"
+                      dataType="dbDate"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[date]"
+                      name="date" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Update AR_Balance in ar_snapshot_raw"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Connections[OleDbConnection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <externalMetadataColumns
+                    isUsed="True" />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Data Flow Task.Paths[OLE DB Source Output]"
+              endId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]"
+              name="OLE DB Source Output"
+              startId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="154.857142857143,42.2857142857143"
+          Id="Package\Data Flow Task"
+          TopLeft="157.777781957462,53.772726689981" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Data Flow Task">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="168,42.2857142857143"
+          Id="Package\Data Flow Task\AR Snapshot Raw"
+          TopLeft="76.6666686976398,30.1363633097696" />
+        <NodeLayout
+          Size="275.428571428572,42.2857142857143"
+          Id="Package\Data Flow Task\Update AR_Balance in ar_snapshot_raw"
+          TopLeft="40.0000010596381,210.363634083882" />
+        <NodeLayout
+          Size="157.142857142858,42.2857142857143"
+          Id="Package\Data Flow Task\Derived Column"
+          TopLeft="84.4444466814582,109.909089717983" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          TopLeft="161.841271975263,72.4220775954839">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,37.4870121224993"
+              Start="0,0"
+              End="0,29.9870121224993">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,29.9870121224993" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\AR Snapshot Raw">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

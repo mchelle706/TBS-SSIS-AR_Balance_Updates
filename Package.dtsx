@@ -1,0 +1,2140 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/5/2020 10:59:11 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="9LDZL13"
+  DTS:CreatorName="FACT\michelle.rutz"
+  DTS:DTSID="{2CC9C8AA-EF03-4D00-AF93-91E4453CEE12}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.123"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{4F6033DD-8AF2-48CF-8CFB-D95606FDC4D6}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Data Flow Task"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{5A7BE80E-61BF-4C70-9027-A18C25C296FC}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Data Flow Task"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Data Flow Task\Aggregate"
+              componentClassID="Microsoft.Aggregate"
+              contactInfo="Aggregate;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+              description="Aggregates data with functions such as Average, Sum, Count, Max, and Min. For example, group data to compute the sum of sales per product or the average visits per day."
+              name="Aggregate"
+              version="3">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the approximate number of group by keys that the aggregation produces. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no KeyScale value is used."
+                  name="KeyScale"
+                  typeConverter="KeyScaleType">0</property>
+                <property
+                  dataType="System.Null"
+                  description="Specifies the exact number of group by keys that the aggregation produces. If a KeyScale value is specified, the value in Keys takes precedence."
+                  name="Keys" />
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the approximate number of distinct values in a column that the aggregation counts distinctly. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no CountDistinctScale value is used."
+                  name="CountDistinctScale"
+                  typeConverter="KeyScaleType">0</property>
+                <property
+                  dataType="System.Null"
+                  description="Specifies the exact number of distinct values in a column that the aggregation counts distinctly. If a CountDistinctScale value is specified, the value in CountDistinctKeys takes precedence."
+                  name="CountDistinctKeys" />
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage by which memory can be extended during the aggregation. Valid values are between 1 and 100."
+                  name="AutoExtendFactor">25</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Aggregate.Inputs[Aggregate Input 1]"
+                  name="Aggregate Input 1">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate.Inputs[Aggregate Input 1].Columns[client_id]"
+                      cachedDataType="i4"
+                      cachedName="client_id"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate.Inputs[Aggregate Input 1].Columns[invoice_amount]"
+                      cachedDataType="r8"
+                      cachedName="invoice_amount"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate.Inputs[Aggregate Input 1].Columns[invoice_balance]"
+                      cachedDataType="r8"
+                      cachedName="invoice_balance"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1]"
+                  name="Aggregate Output 1">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the approximate number of group by keys that the aggregation produces. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no KeyScale value is used."
+                      name="KeyScale"
+                      typeConverter="KeyScaleType">0</property>
+                    <property
+                      dataType="System.Null"
+                      description="Specifies the exact number of group by keys that the aggregation produces. If a KeyScale value is specified, the value in Keys takes precedence."
+                      name="Keys" />
+                  </properties>
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[client_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[client_id]"
+                      name="client_id">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[invoice_amount]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[invoice_amount]"
+                      name="invoice_amount">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">4</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[invoice_balance]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[invoice_balance]"
+                      name="invoice_balance">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">4</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Aggregate 1"
+              componentClassID="Microsoft.Aggregate"
+              contactInfo="Aggregate;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+              description="Aggregates data with functions such as Average, Sum, Count, Max, and Min. For example, group data to compute the sum of sales per product or the average visits per day."
+              name="Aggregate 1"
+              version="3">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the approximate number of group by keys that the aggregation produces. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no KeyScale value is used."
+                  name="KeyScale"
+                  typeConverter="KeyScaleType">0</property>
+                <property
+                  dataType="System.Null"
+                  description="Specifies the exact number of group by keys that the aggregation produces. If a KeyScale value is specified, the value in Keys takes precedence."
+                  name="Keys" />
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the approximate number of distinct values in a column that the aggregation counts distinctly. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no CountDistinctScale value is used."
+                  name="CountDistinctScale"
+                  typeConverter="KeyScaleType">0</property>
+                <property
+                  dataType="System.Null"
+                  description="Specifies the exact number of distinct values in a column that the aggregation counts distinctly. If a CountDistinctScale value is specified, the value in CountDistinctKeys takes precedence."
+                  name="CountDistinctKeys" />
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage by which memory can be extended during the aggregation. Valid values are between 1 and 100."
+                  name="AutoExtendFactor">25</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Aggregate 1.Inputs[Aggregate Input 1]"
+                  name="Aggregate Input 1">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate 1.Inputs[Aggregate Input 1].Columns[client_id]"
+                      cachedDataType="i4"
+                      cachedName="client_id"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate 1.Inputs[Aggregate Input 1].Columns[invoice_amount]"
+                      cachedDataType="r8"
+                      cachedName="invoice_amount"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate 1.Inputs[Aggregate Input 1].Columns[invoice_balance]"
+                      cachedDataType="r8"
+                      cachedName="invoice_balance"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1]"
+                  name="Aggregate Output 1">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the approximate number of group by keys that the aggregation produces. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no KeyScale value is used."
+                      name="KeyScale"
+                      typeConverter="KeyScaleType">0</property>
+                    <property
+                      dataType="System.Null"
+                      description="Specifies the exact number of group by keys that the aggregation produces. If a KeyScale value is specified, the value in Keys takes precedence."
+                      name="Keys" />
+                  </properties>
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1].Columns[client_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1].Columns[client_id]"
+                      name="client_id">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1].Columns[invoice_amount]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1].Columns[invoice_amount]"
+                      name="invoice_amount">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">4</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1].Columns[invoice_balance]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1].Columns[invoice_balance]"
+                      name="invoice_balance">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">4</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Aggregate 2"
+              componentClassID="Microsoft.Aggregate"
+              contactInfo="Aggregate;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+              description="Aggregates data with functions such as Average, Sum, Count, Max, and Min. For example, group data to compute the sum of sales per product or the average visits per day."
+              name="Aggregate 2"
+              version="3">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the approximate number of group by keys that the aggregation produces. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no KeyScale value is used."
+                  name="KeyScale"
+                  typeConverter="KeyScaleType">0</property>
+                <property
+                  dataType="System.Null"
+                  description="Specifies the exact number of group by keys that the aggregation produces. If a KeyScale value is specified, the value in Keys takes precedence."
+                  name="Keys" />
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the approximate number of distinct values in a column that the aggregation counts distinctly. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no CountDistinctScale value is used."
+                  name="CountDistinctScale"
+                  typeConverter="KeyScaleType">0</property>
+                <property
+                  dataType="System.Null"
+                  description="Specifies the exact number of distinct values in a column that the aggregation counts distinctly. If a CountDistinctScale value is specified, the value in CountDistinctKeys takes precedence."
+                  name="CountDistinctKeys" />
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage by which memory can be extended during the aggregation. Valid values are between 1 and 100."
+                  name="AutoExtendFactor">25</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Aggregate 2.Inputs[Aggregate Input 1]"
+                  name="Aggregate Input 1">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate 2.Inputs[Aggregate Input 1].Columns[client_id]"
+                      cachedDataType="i4"
+                      cachedName="client_id"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate 2.Inputs[Aggregate Input 1].Columns[invoice_amount]"
+                      cachedDataType="r8"
+                      cachedName="invoice_amount"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\Aggregate 2.Inputs[Aggregate Input 1].Columns[invoice_balance]"
+                      cachedDataType="r8"
+                      cachedName="invoice_balance"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1]"
+                  name="Aggregate Output 1">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the approximate number of group by keys that the aggregation produces. Low indicates 500,000 key values, Medium indicates 5 million key values, and High indicates more than 25 million key values. Unspecified indicates no KeyScale value is used."
+                      name="KeyScale"
+                      typeConverter="KeyScaleType">0</property>
+                    <property
+                      dataType="System.Null"
+                      description="Specifies the exact number of group by keys that the aggregation produces. If a KeyScale value is specified, the value in Keys takes precedence."
+                      name="Keys" />
+                  </properties>
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1].Columns[client_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1].Columns[client_id]"
+                      name="client_id">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1].Columns[invoice_amount]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1].Columns[invoice_amount]"
+                      name="invoice_amount">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">4</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1].Columns[invoice_balance]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1].Columns[invoice_balance]"
+                      name="invoice_balance">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the ID of the input column used in the aggregation."
+                          name="AggregationColumnId">#{Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]}</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the type of aggregation."
+                          name="AggregationType"
+                          typeConverter="AggregationType">4</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Indicates whether the column requires special handling because it may contain oversized data or it requires precision beyond a float data type."
+                          name="IsBig">1</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Specifies the string comparison options."
+                          name="AggregationComparisonFlags">0</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\AR Snapshot Raw"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="AR Snapshot Raw"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[ar_snapshot_raw]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT
+	CAST('Transportation' as nvarchar) as business_unit
+	,client.id AS client_id
+	,ent.number AS client_number
+	,ent.name AS client_name
+	,debtor.id AS debtor_id
+	,d_ent.number AS debtor_number
+	,d_ent.name AS debtor_name
+	,inv.invno as invoice_number
+	,inv.TransPostDate transpostdate
+	,inv.amt as invoice_amount
+	,inv.balance as invoice_balance
+	,DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) as age
+	,CASE WHEN inv.DebtorKey IN (11352,30273) THEN 'ADVANCE' ELSE 'INVOICE' END type
+	,CURRENT_TIMESTAMP as row_created_date
+	,CAST(CURRENT_TIMESTAMP as date) AS date
+	,CASE
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 30 THEN '&lt;=30'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 60 THEN '31-60'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 90 THEN '61-90'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &lt;= 120 THEN '91-120'
+		WHEN DATEDIFF(day,inv.TransPostDate,CURRENT_TIMESTAMP) &gt; 120 THEN '121+'
+	END AS ar_bucket
+	,client.row_source_system
+
+FROM CadenceReplica.dbo.Invoices (nolock) inv
+	INNER JOIN CadenceReplica.dbo.Clients clt (nolock) on inv.clientkey = clt.clientkey
+	INNER JOIN CadenceReplica.dbo.Debtors dbt (nolock) on inv.debtorkey = dbt.debtorkey
+	INNER JOIN dbo.client ON clt.clientkey = client.row_source_system_key
+		AND client.row_source_system = 'Cadence'
+	INNER JOIN dbo.entity ent ON client.entity_id = ent.id
+	INNER JOIN dbo.debtor ON dbt.DebtorKey = debtor.row_source_system_key
+		AND debtor.row_source_system = 'Cadence'
+	INNER JOIN dbo.entity d_ent ON debtor.entity_id = d_ent.id
+
+WHERE
+	inv.balance &lt;&gt; 0
+	--AND inv.amt &lt;&gt; 0
+	--AND inv.BuyStatus = 3
+	and inv.BuyStatus IN (4)
+	and clt.ClientKey &lt;&gt; 10704
+	and clt.office = 'TBSFACTORING'
+	and clt.ClientKey = 6890
+
+
+UNION ALL
+
+SELECT
+	CAST('Capital Funding' as nvarchar) AS business_unit
+	,cli.id AS client_id
+	,c_entity.number AS client_number
+	,c_entity.name AS client_name
+	,dbt.id AS debtor_id
+	,ent.number AS debtor_number
+	,ent.name AS debtor_name
+	,i.tranid invoice_number
+	,i.trandate transpostdate
+	,foreigntotal inovice_amount
+	,foreignamountunpaid invoice_balance
+	,datediff(day,i.trandate,CURRENT_TIMESTAMP) age
+	,'INVOICE' as type
+	,CURRENT_TIMESTAMP as row_created_date
+	,CAST(CURRENT_TIMESTAMP as date) AS date
+	,CASE
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 30 THEN '&lt;=30'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 60 THEN '31-60'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 90 THEN '61-90'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &lt;= 120 THEN '91-120'
+		WHEN DATEDIFF(day,i.TranDate,CURRENT_TIMESTAMP) &gt; 120 THEN '121+'
+	END AS ar_bucket
+	,cli.row_source_system
+
+FROM netsuite.invoice i
+	 inner join netsuite.client c on i.custbody_client = c.id
+	 inner join dbo.Client cli on c.id = cli.row_source_system_key
+		AND cli.row_source_system = 'Netsuite'
+	INNER JOIN dbo.entity c_entity ON cli.entity_id = c_entity.id
+	 inner join netsuite.debtor d on i.entity = d.id
+	 inner join dbo.Debtor dbt on d.id = dbt.row_source_system_key
+		AND dbt.row_source_system = 'Netsuite'
+	INNER JOIN dbo.entity ent ON dbt.entity_id = ent.id
+
+WHERE foreignamountunpaid &lt;&gt; 0
+and i.VOID = 'F';</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\AR Snapshot Raw.Connections[OleDbConnection]"
+                  connectionManagerID="{63544EDD-85F1-4E60-B530-4B9956845431}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[tbs-cl-rds-sql-01.choziwohin32.us-east-1.rds.amazonaws.com.EDWIntegration_DEV.michelle.rutz]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[business_unit]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[business_unit]"
+                      length="30"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[business_unit]"
+                      name="business_unit"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_id]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_id]"
+                      name="client_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_number]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_number]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_number]"
+                      name="client_number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_name]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_name]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[client_name]"
+                      name="client_name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_id]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_id]"
+                      name="debtor_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_number]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_number]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_number]"
+                      name="debtor_number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_name]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_name]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[debtor_name]"
+                      name="debtor_name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_number]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_number]"
+                      length="138"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_number]"
+                      name="invoice_number"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[transpostdate]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[transpostdate]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[transpostdate]"
+                      name="transpostdate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_amount]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_amount]"
+                      name="invoice_amount"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_balance]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[invoice_balance]"
+                      name="invoice_balance"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[age]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[age]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[age]"
+                      name="age"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[type]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[type]"
+                      length="7"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[type]"
+                      name="type"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_created_date]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_created_date]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_created_date]"
+                      name="row_created_date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[ar_bucket]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[ar_bucket]"
+                      length="6"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[ar_bucket]"
+                      name="ar_bucket"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_source_system]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_source_system]"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[row_source_system]"
+                      name="row_source_system"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[date]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[date]"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].Columns[date]"
+                      name="date"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[business_unit]"
+                      dataType="wstr"
+                      length="30"
+                      name="business_unit" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_id]"
+                      dataType="i4"
+                      name="client_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="client_number" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[client_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="client_name" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_id]"
+                      dataType="i4"
+                      name="debtor_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="debtor_number" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[debtor_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="debtor_name" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_number]"
+                      dataType="wstr"
+                      length="138"
+                      name="invoice_number" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[transpostdate]"
+                      dataType="dbTimeStamp"
+                      name="transpostdate" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_amount]"
+                      dataType="r8"
+                      name="invoice_amount" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[invoice_balance]"
+                      dataType="r8"
+                      name="invoice_balance" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[age]"
+                      dataType="i4"
+                      name="age" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="7"
+                      name="type" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_created_date]"
+                      dataType="dbTimeStamp"
+                      name="row_created_date" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[ar_bucket]"
+                      codePage="1252"
+                      dataType="str"
+                      length="6"
+                      name="ar_bucket" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[row_source_system]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="row_source_system" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output].ExternalColumns[date]"
+                      dataType="dbDate"
+                      name="date" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[business_unit]"
+                      dataType="wstr"
+                      length="30"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[business_unit]"
+                      name="business_unit" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_id]"
+                      name="client_id" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_number]"
+                      name="client_number" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[client_name]"
+                      name="client_name" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_id]"
+                      name="debtor_id" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_number]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_number]"
+                      name="debtor_number" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_name]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[debtor_name]"
+                      name="debtor_name" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_number]"
+                      dataType="wstr"
+                      length="138"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_number]"
+                      name="invoice_number" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[transpostdate]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[transpostdate]"
+                      name="transpostdate" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_amount]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_amount]"
+                      name="invoice_amount" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_balance]"
+                      dataType="r8"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[invoice_balance]"
+                      name="invoice_balance" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[age]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[age]"
+                      name="age" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[type]"
+                      codePage="1252"
+                      dataType="str"
+                      length="7"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[type]"
+                      name="type" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_created_date]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_created_date]"
+                      name="row_created_date" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ar_bucket]"
+                      codePage="1252"
+                      dataType="str"
+                      length="6"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ar_bucket]"
+                      name="ar_bucket" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_source_system]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[row_source_system]"
+                      name="row_source_system" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[date]"
+                      dataType="dbDate"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[date]"
+                      name="date" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\Multicast"
+              componentClassID="Microsoft.Multicast"
+              contactInfo="Multicast;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Distributes every input row to every row in one or more outputs. For example, branch your data flow to make a copy of data so that some values can be masked before sharing with external partners."
+              name="Multicast">
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\Multicast.Inputs[Multicast Input 1]"
+                  name="Multicast Input 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\Multicast.Outputs[Multicast Output 1]"
+                  deleteOutputOnPathDetached="true"
+                  name="Multicast Output 1"
+                  synchronousInputId="Package\Data Flow Task\Multicast.Inputs[Multicast Input 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Multicast.Outputs[Multicast Output 2]"
+                  deleteOutputOnPathDetached="true"
+                  name="Multicast Output 2"
+                  synchronousInputId="Package\Data Flow Task\Multicast.Inputs[Multicast Input 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Multicast.Outputs[Multicast Output 3]"
+                  deleteOutputOnPathDetached="true"
+                  name="Multicast Output 3"
+                  synchronousInputId="Package\Data Flow Task\Multicast.Inputs[Multicast Input 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Multicast.Outputs[Multicast Output 4]"
+                  dangling="true"
+                  deleteOutputOnPathDetached="true"
+                  name="Multicast Output 4"
+                  synchronousInputId="Package\Data Flow Task\Multicast.Inputs[Multicast Input 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\stg client_ar"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="stg client_ar"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[stg.client_ar]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\stg client_ar.Connections[OleDbConnection]"
+                  connectionManagerID="{63544EDD-85F1-4E60-B530-4B9956845431}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[tbs-cl-rds-sql-01.choziwohin32.us-east-1.rds.amazonaws.com.EDWIntegration_DEV.michelle.rutz]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].Columns[client_id]"
+                      cachedDataType="i4"
+                      cachedName="client_id"
+                      externalMetadataColumnId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].ExternalColumns[client_id]"
+                      lineageId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[client_id]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].Columns[invoice_amount]"
+                      cachedDataType="r8"
+                      cachedName="invoice_amount"
+                      externalMetadataColumnId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].ExternalColumns[invoice_amount]"
+                      lineageId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[invoice_amount]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].Columns[invoice_balance]"
+                      cachedDataType="r8"
+                      cachedName="invoice_balance"
+                      externalMetadataColumnId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].ExternalColumns[invoice_balance]"
+                      lineageId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1].Columns[invoice_balance]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].ExternalColumns[client_id]"
+                      dataType="i4"
+                      name="client_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].ExternalColumns[invoice_amount]"
+                      dataType="r8"
+                      name="invoice_amount" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input].ExternalColumns[invoice_balance]"
+                      dataType="r8"
+                      name="invoice_balance" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\stg client_ar.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\stg client_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\stg client_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\stg client_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\stg client_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\stg combo_ar"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="stg combo_ar"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\stg combo_ar.Connections[OleDbConnection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\stg combo_ar.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <externalMetadataColumns
+                    isUsed="True" />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\stg combo_ar.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Data Flow Task\stg combo_ar.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\stg combo_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\stg combo_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\stg combo_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\stg combo_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\stg debtor_ar"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="stg debtor_ar"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset"></property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\stg debtor_ar.Connections[OleDbConnection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\stg debtor_ar.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <externalMetadataColumns
+                    isUsed="True" />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\stg debtor_ar.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Data Flow Task\stg debtor_ar.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\stg debtor_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\stg debtor_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\stg debtor_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\stg debtor_ar.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Data Flow Task.Paths[Aggregate Output 1]"
+              endId="Package\Data Flow Task\stg client_ar.Inputs[OLE DB Destination Input]"
+              name="Aggregate Output 1"
+              startId="Package\Data Flow Task\Aggregate.Outputs[Aggregate Output 1]" />
+            <path
+              refId="Package\Data Flow Task.Paths[Aggregate Output 11]"
+              endId="Package\Data Flow Task\stg debtor_ar.Inputs[OLE DB Destination Input]"
+              name="Aggregate Output 1"
+              startId="Package\Data Flow Task\Aggregate 1.Outputs[Aggregate Output 1]" />
+            <path
+              refId="Package\Data Flow Task.Paths[Aggregate Output 12]"
+              endId="Package\Data Flow Task\stg combo_ar.Inputs[OLE DB Destination Input]"
+              name="Aggregate Output 1"
+              startId="Package\Data Flow Task\Aggregate 2.Outputs[Aggregate Output 1]" />
+            <path
+              refId="Package\Data Flow Task.Paths[Derived Column Output]"
+              endId="Package\Data Flow Task\Multicast.Inputs[Multicast Input 1]"
+              name="Derived Column Output"
+              startId="Package\Data Flow Task\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\Data Flow Task.Paths[Multicast Output 1]"
+              endId="Package\Data Flow Task\Aggregate.Inputs[Aggregate Input 1]"
+              name="Multicast Output 1"
+              startId="Package\Data Flow Task\Multicast.Outputs[Multicast Output 1]" />
+            <path
+              refId="Package\Data Flow Task.Paths[Multicast Output 2]"
+              endId="Package\Data Flow Task\Aggregate 1.Inputs[Aggregate Input 1]"
+              name="Multicast Output 2"
+              startId="Package\Data Flow Task\Multicast.Outputs[Multicast Output 2]" />
+            <path
+              refId="Package\Data Flow Task.Paths[Multicast Output 3]"
+              endId="Package\Data Flow Task\Aggregate 2.Inputs[Aggregate Input 1]"
+              name="Multicast Output 3"
+              startId="Package\Data Flow Task\Multicast.Outputs[Multicast Output 3]" />
+            <path
+              refId="Package\Data Flow Task.Paths[OLE DB Source Output]"
+              endId="Package\Data Flow Task\Derived Column.Inputs[Derived Column Input]"
+              name="OLE DB Source Output"
+              startId="Package\Data Flow Task\AR Snapshot Raw.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{DD467904-208E-49E9-BD6D-99C4EC7EB581}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task 1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{22116F6F-B3B8-4600-8C4F-AB7D60B3CD35}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task 1"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Execute SQL Task 2"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{A34088C8-CD5B-4163-85AF-194F40F1F655}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Execute SQL Task 2"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Trunc"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
+      DTS:DTSID="{7749C985-5809-43D3-BD66-735C3B8B1700}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Trunc"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:SqlStatementSource="TRUNCATE TABLE &lt;dbo.whatever&gt;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Trunc 1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
+      DTS:DTSID="{1151eea6-c3c9-4e05-bf70-3e7286b5ac52}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Trunc 1"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:SqlStatementSource="TRUNCATE TABLE &lt;dbo.whatever&gt;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{841DAF9F-7FAC-4C37-8F1E-0A5103E224E7}"
+      DTS:From="Package\Trunc"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Data Flow Task" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{F5467C1D-2B2D-4F4D-B3F4-5C49557FD03E}"
+      DTS:From="Package\Data Flow Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Execute SQL Task" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{EA08074A-2AD3-40BF-99BA-5B84E45770AC}"
+      DTS:From="Package\Data Flow Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Execute SQL Task 1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{49350269-A159-438F-9E30-A9A3D0339F83}"
+      DTS:From="Package\Data Flow Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Execute SQL Task 2" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{0E971BD7-B870-4938-9AF9-B0FF105388BD}"
+      DTS:From="Package\Execute SQL Task"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Trunc 1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{B9533DB6-5636-4AAB-B816-AF0091E0FBCC}"
+      DTS:From="Package\Execute SQL Task 1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\Trunc 1" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
+      DTS:CreationName=""
+      DTS:DTSID="{31185B71-F6ED-4886-8C2F-F8C1CB1CED02}"
+      DTS:From="Package\Execute SQL Task 2"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 6"
+      DTS:To="Package\Trunc 1" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="154.857142857143,42.2857142857143"
+          Id="Package\Data Flow Task"
+          TopLeft="247.928571428571,107.785714285714" />
+        <NodeLayout
+          Size="169.714285714286,42.2857142857143"
+          Id="Package\Execute SQL Task"
+          TopLeft="5.50000000000009,210.071428571428" />
+        <NodeLayout
+          Size="178.857142857143,42.2857142857143"
+          Id="Package\Execute SQL Task 1"
+          TopLeft="235.928571428571,210.071428571428" />
+        <NodeLayout
+          Size="178.857142857143,42.2857142857143"
+          Id="Package\Execute SQL Task 2"
+          TopLeft="474.928571428571,210.071428571428" />
+        <NodeLayout
+          Size="107.428571428572,42.2857142857143"
+          Id="Package\Trunc"
+          TopLeft="271.642857142857,5.49999999999985" />
+        <NodeLayout
+          Size="107.428571428572,42.2857142857143"
+          Id="Package\Trunc 1"
+          TopLeft="271.642857142857,312.357142857142" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="325.357142857143,47.7857142857141">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="288.642857142857,150.071428571428">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-198.285714285714,60.0000000000001"
+              Start="0,0"
+              End="-198.285714285714,52.5000000000001">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.677146311971" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.677146311971"
+                    Point2="0,20.677146311971"
+                    Point3="-4,20.677146311971" />
+                  <mssgle:LineSegment
+                    End="-194.285714285714,20.677146311971" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-194.285714285714,20.677146311971"
+                    Point2="-198.285714285714,20.677146311971"
+                    Point3="-198.285714285714,24.677146311971" />
+                  <mssgle:LineSegment
+                    End="-198.285714285714,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="325.357142857143,150.071428571428">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="362.071428571429,150.071428571428">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="202.285714285714,59.9999999999999"
+              Start="0,0"
+              End="202.285714285714,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.677146311971" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.677146311971"
+                    Point2="0,20.677146311971"
+                    Point3="4,20.677146311971" />
+                  <mssgle:LineSegment
+                    End="198.285714285714,20.677146311971" />
+                  <mssgle:CubicBezierSegment
+                    Point1="198.285714285714,20.677146311971"
+                    Point2="202.285714285714,20.677146311971"
+                    Point3="202.285714285714,24.677146311971" />
+                  <mssgle:LineSegment
+                    End="202.285714285714,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="90.3571428571429,252.357142857143">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="210.142857142857,59.9999999999998"
+              Start="0,0"
+              End="210.142857142857,52.4999999999998">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35.031141868512" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,35.031141868512"
+                    Point2="0,39.031141868512"
+                    Point3="4,39.031141868512" />
+                  <mssgle:LineSegment
+                    End="206.142857142857,39.031141868512" />
+                  <mssgle:CubicBezierSegment
+                    Point1="206.142857142857,39.031141868512"
+                    Point2="210.142857142857,39.031141868512"
+                    Point3="210.142857142857,43.031141868512" />
+                  <mssgle:LineSegment
+                    End="210.142857142857,52.4999999999998" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="325.357142857143,252.357142857143">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="564.357142857143,252.357142857143">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-214.142857142857,59.9999999999999"
+              Start="0,0"
+              End="-214.142857142857,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35.031141868512" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,35.031141868512"
+                    Point2="0,39.031141868512"
+                    Point3="-4,39.031141868512" />
+                  <mssgle:LineSegment
+                    End="-210.142857142857,39.031141868512" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-210.142857142857,39.031141868512"
+                    Point2="-214.142857142857,39.031141868512"
+                    Point3="-214.142857142857,43.031141868512" />
+                  <mssgle:LineSegment
+                    End="-214.142857142857,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Data Flow Task">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="157.142857142858,42.2857142857143"
+          Id="Package\Data Flow Task\Derived Column"
+          TopLeft="207.071428571429,107.785714285714" />
+        <NodeLayout
+          Size="168,42.2857142857143"
+          Id="Package\Data Flow Task\AR Snapshot Raw"
+          TopLeft="201.642857142857,5.49999999999985" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          TopLeft="285.642857142857,47.7857142857141">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="137.714285714286,42.2857142857143"
+          Id="Package\Data Flow Task\stg client_ar"
+          TopLeft="16.6111114054551,411.097402635825" />
+        <NodeLayout
+          Size="129.714285714286,42.2857142857143"
+          Id="Package\Data Flow Task\Aggregate"
+          TopLeft="25.7857142857143,312.357142857142" />
+        <NodeLayout
+          Size="122.285714285715,42.2857142857143"
+          Id="Package\Data Flow Task\Multicast"
+          TopLeft="224.5,210.071428571428" />
+        <NodeLayout
+          Size="138.285714285715,42.2857142857143"
+          Id="Package\Data Flow Task\Aggregate 1"
+          TopLeft="216.5,312.357142857142" />
+        <NodeLayout
+          Size="143.428571428572,42.2857142857143"
+          Id="Package\Data Flow Task\stg debtor_ar"
+          TopLeft="212.5,414.642857142857" />
+        <NodeLayout
+          Size="138.285714285715,42.2857142857143"
+          Id="Package\Data Flow Task\Aggregate 2"
+          TopLeft="415.5,312.357142857142" />
+        <NodeLayout
+          Size="145.142857142858,42.2857142857143"
+          Id="Package\Data Flow Task\stg combo_ar"
+          TopLeft="408.944444164818,414.642857142857" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Derived Column Output]"
+          TopLeft="285.642857142857,150.071428571428">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Multicast Output 1]"
+          TopLeft="257.071428571429,252.357142857143">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-166.428571428571,59.9999999999999"
+              Start="0,0"
+              End="-166.428571428571,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.8536585365853" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.8536585365853"
+                    Point2="0,20.8536585365853"
+                    Point3="-4,20.8536585365853" />
+                  <mssgle:LineSegment
+                    End="-162.428571428571,20.8536585365853" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-162.428571428571,20.8536585365853"
+                    Point2="-166.428571428571,20.8536585365853"
+                    Point3="-166.428571428571,24.8536585365853" />
+                  <mssgle:LineSegment
+                    End="-166.428571428571,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Multicast Output 2]"
+          TopLeft="285.642857142857,252.357142857143">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Multicast Output 3]"
+          TopLeft="314.214285714286,252.357142857143">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="170.428571428571,59.9999999999999"
+              Start="0,0"
+              End="170.428571428571,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,16.8536585365854" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,16.8536585365854"
+                    Point2="0,20.8536585365854"
+                    Point3="4,20.8536585365854" />
+                  <mssgle:LineSegment
+                    End="166.428571428571,20.8536585365854" />
+                  <mssgle:CubicBezierSegment
+                    Point1="166.428571428571,20.8536585365854"
+                    Point2="170.428571428571,20.8536585365854"
+                    Point3="170.428571428571,24.8536585365854" />
+                  <mssgle:LineSegment
+                    End="170.428571428571,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Aggregate Output 1]"
+          TopLeft="88.0555557027275,354.642857142857">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,56.4545454929682"
+              Start="0,0"
+              End="0,48.9545454929682">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,48.9545454929682" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Aggregate Output 11]"
+          TopLeft="284.928571428571,354.642857142857">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Aggregate Output 12]"
+          TopLeft="483.079364939552,354.642857142857">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,59.9999999999999"
+              Start="0,0"
+              End="0,52.4999999999999">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.4999999999999" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\AR Snapshot Raw">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\stg client_ar">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
